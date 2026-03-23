@@ -165,6 +165,18 @@ class AnyProviderConfig:
         )
 
     @classmethod
+    def for_kiro(cls, config: AiConfig) -> AnyProviderConfig:
+        fallback_key = cls.os_key("KIRO_API_KEY")
+        return cls._for_openai_like(
+            config,
+            "kiro",
+            "Kiro",
+            fallback_key=fallback_key,
+            fallback_base_url="https://api.kiro.ai/v1/",
+            require_key=True,
+        )
+
+    @classmethod
     def _for_openai_like(
         cls,
         config: AiConfig,
@@ -265,6 +277,8 @@ class AnyProviderConfig:
             return cls.for_openrouter(config)
         elif model_id.provider == "wandb":
             return cls.for_wandb(config)
+        elif model_id.provider == "kiro":
+            return cls.for_kiro(config)
         elif model_id.provider == "openai_compatible":
             return cls.for_openai_compatible(config)
         else:

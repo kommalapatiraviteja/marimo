@@ -56,11 +56,16 @@ def _guess_provider(model: str) -> AiProviderId:
             or model.startswith("o1")
         )
 
+    def is_kiro(model: str) -> bool:
+        return model.startswith("kiro")
+
     if is_google(model):
         return AiProviderId("google")
     elif is_anthropic(model):
         return AiProviderId("anthropic")
     elif is_openai(model):
         return AiProviderId("openai")
+    elif is_kiro(model):
+        return AiProviderId("kiro")
     else:
         return AiProviderId("ollama")

@@ -516,6 +516,30 @@ class AzureOpenAIProvider(OpenAIProvider):
         )
 
 
+class KiroProvider(OpenAIClientMixin, PydanticProvider["PydanticOpenAI"]):
+    """Kiro AI provider using OpenAI-compatible API."""
+
+    def create_provider(self, config: AnyProviderConfig) -> PydanticOpenAI:
+        from pydantic_ai.providers.openai import (
+            OpenAIProvider as PydanticOpenAI,
+        )
+
+        client = self.get_openai_client(config)
+        return PydanticOpenAI(openai_client=client)
+
+    def create_model(self, max_tokens: int) -> OpenAIChatModel:
+        from pydantic_ai.models.openai import (
+            OpenAIChatModel,
+            OpenAIChatModelSettings,
+        )
+
+        return OpenAIChatModel(
+            model_name=self.model,
+            provider=self.provider,
+            settings=OpenAIChatModelSettings(max_tokens=max_tokens),
+        )
+
+
 class CustomProvider(OpenAIClientMixin, PydanticProvider["Provider[Any]"]):
     """Support for custom providers which may or may not be OpenAI-compatible.
 
@@ -936,6 +960,8 @@ def get_completion_provider(
         return OpenAIProvider(
             model_id.model, config, [DependencyManager.openai]
         )
+    elif model_id.provider == "kiro":
+        return KiroProvider(model_id.model, config, [DependencyManager.openai])
     else:
         return CustomProvider(model_id, config, [DependencyManager.openai])
 
