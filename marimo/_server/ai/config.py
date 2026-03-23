@@ -172,7 +172,9 @@ class AnyProviderConfig:
             "kiro",
             "Kiro",
             fallback_key=fallback_key,
-            fallback_base_url="https://api.kiro.ai/v1/",
+            # Note: Kiro is primarily an IDE, this is a placeholder URL
+            # Users should configure the actual API endpoint if available
+            fallback_base_url="https://api.kiro.dev/v1/",
             require_key=True,
         )
 

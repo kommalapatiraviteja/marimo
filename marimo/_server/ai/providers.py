@@ -517,7 +517,12 @@ class AzureOpenAIProvider(OpenAIProvider):
 
 
 class KiroProvider(OpenAIClientMixin, PydanticProvider["PydanticOpenAI"]):
-    """Kiro AI provider using OpenAI-compatible API."""
+    """Kiro AI provider using OpenAI-compatible API.
+    
+    Note: Kiro is primarily an IDE application. This provider assumes
+    Kiro offers an OpenAI-compatible API endpoint for AI model access.
+    Users should configure the correct base_url in their settings.
+    """
 
     def create_provider(self, config: AnyProviderConfig) -> PydanticOpenAI:
         from pydantic_ai.providers.openai import (
